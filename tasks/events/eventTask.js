@@ -74,13 +74,12 @@ async function getMedia(event) {
 }
 
 
-async function saveEvents(){
-
+async function saveEvents(h){
     tmdb_fetchs = 0, found_db = 0, found_tmdb = 0
 
     console.log('+++ Fetch Events from origin...')
     
-    const channels = await fetchDataFromOrigin()
+    const channels = await fetchDataFromOrigin(h)
 
     console.log('+++ Fetched...')
 

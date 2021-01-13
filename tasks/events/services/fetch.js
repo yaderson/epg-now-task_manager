@@ -20,11 +20,11 @@ async function getEpg(from, to){
 }
 
 
-async function fetchDataFromOrigin(){
+async function fetchDataFromOrigin(h){
     let now = new Date()
 
     let from = getDate(now)
-    now.setHours((now.getHours()+12))
+    now.setHours((now.getHours()+h))
     let to = getDate(now)
     console.log(from, to)
     const channels = await getEpg(from, to)

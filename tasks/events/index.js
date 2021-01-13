@@ -5,7 +5,7 @@ const { saveEvents } = require("./eventTask")
 
 
 module.exports = async function (data) {
-    const { started_date } = data
+    const { started_date, hours } = data
 
     console.log('Handing task events ...')
     await messager(`\u{1F3C1} The task/events was started successful`)
@@ -22,8 +22,7 @@ module.exports = async function (data) {
     }
 
     
-    const final = await saveEvents()
-
+    const final = await saveEvents(hours||12)
     const finish_date = new Date()
 
 
