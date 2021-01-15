@@ -74,13 +74,17 @@ async function getMedia(event) {
 }
 
 
-async function saveEvents(h){
+async function saveEvents(days){
+    const hour = 24
     tmdb_fetchs = 0, found_db = 0, found_tmdb = 0
 
     console.log('+++ Fetch Events from origin...')
-    
-    const channels = await fetchDataFromOrigin(h)
 
+    const dateFrom = Date.now()
+    const dateTo = new Date(dateFrom+(hour*60)*60*1000)
+    
+    const channels = await fetchDataFromOrigin(dateFrom, dateTo, days)
+    console.log(channels[0].events);
     console.log('+++ Fetched...')
 
     let eventsAll = []

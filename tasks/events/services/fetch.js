@@ -12,6 +12,7 @@ function getDate(date) {
     console.log(dateStrig, timeString)
     return (`${dateStrig[2]}${dateStrig[1]}${dateStrig[0]}${timeString[0]}${timeString[1]}${timeString[2]}`)
 }
+
 async function getEpg(from, to){
     console.log(`fetch from: ${from} | to: ${to}`)
     const res = await(await fetch(`${api_url}&date_from=${from}&date_to=${to}`)).json()
@@ -19,16 +20,39 @@ async function getEpg(from, to){
     return res.response.channels
 }
 
+async function fetchDataFromOrigin(from, to, days) {
+    
+    let data = []
+    
+    const res = await fetch(`${api_url}&date_from=${getDate(new Date(from))}&date_to=${getDate(to)}`)
+    const epg = await res.json()
 
-async function fetchDataFromOrigin(h){
-    let now = new Date()
+    data = epg.response.channels
 
-    let from = getDate(now)
-    now.setHours((now.getHours()+h))
-    let to = getDate(now)
-    console.log(from, to)
-    const channels = await getEpg(from, to)
-    return channels
+    
+    let moreFrom = new Date(to).getTime(), moreTo
+    if(days > 0) {        
+        for(let i=0; i<days; i++) {
+            moreTo = new Date(moreFrom+(24*60)*60*1000)
+            console.log('More data adding: ', new Date(moreFrom).toLocaleString(), new Date(moreTo).toLocaleString());
+
+            const resM = await fetch(`${api_url}&date_from=${getDate(new Date(moreFrom))}&date_to=${getDate(moreTo)}`)
+            const epgM = await resM.json()
+
+            
+             //Delete firs event 
+
+            for(let a=0; a < epgM.response.channels.length; a++){
+                let moreEvents = epgM.response.channels[a].events
+                moreEvents.shift()
+                data[a].events.push(...moreEvents) //Spread on finish date events
+            }
+            console.log('============= finish ===========');
+            moreFrom = moreTo.getTime()
+        }
+    }
+
+	return data
 }
 
 async function searchTMDB(name){
