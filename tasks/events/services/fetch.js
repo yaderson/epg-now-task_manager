@@ -20,21 +20,23 @@ async function getEpg(from, to){
     return res.response.channels
 }
 
-async function fetchDataFromOrigin(from, to, days) {
+async function fetchchannelsFromOrigin(from, to, days) {
+
+    let lastToEventFetch = to
     
-    let data = []
+    let channels = []
     
     const res = await fetch(`${api_url}&date_from=${getDate(new Date(from))}&date_to=${getDate(to)}`)
     const epg = await res.json()
 
-    data = epg.response.channels
+    channels = epg.response.channels
 
     
     let moreFrom = new Date(to).getTime(), moreTo
     if(days > 0) {        
         for(let i=0; i<days; i++) {
             moreTo = new Date(moreFrom+(24*60)*60*1000)
-            console.log('More data adding: ', new Date(moreFrom).toLocaleString(), new Date(moreTo).toLocaleString());
+            console.log('More channels adding: ', new Date(moreFrom).toLocaleString(), new Date(moreTo).toLocaleString());
 
             const resM = await fetch(`${api_url}&date_from=${getDate(new Date(moreFrom))}&date_to=${getDate(moreTo)}`)
             const epgM = await resM.json()
@@ -45,14 +47,18 @@ async function fetchDataFromOrigin(from, to, days) {
             for(let a=0; a < epgM.response.channels.length; a++){
                 let moreEvents = epgM.response.channels[a].events
                 moreEvents.shift()
-                data[a].events.push(...moreEvents) //Spread on finish date events
+                channels[a].events.push(...moreEvents) //Spread on finish date events
             }
             console.log('============= finish ===========');
             moreFrom = moreTo.getTime()
+            lastToEventFetch = moreTo
         }
     }
 
-	return data
+	return {
+        channels,
+        lastToEventFetch
+    }
 }
 
 async function searchTMDB(name){
@@ -66,7 +72,7 @@ async function getTMDB(id, mediaType){
 }
 
 module.exports = {
-    fetchDataFromOrigin,
+    fetchchannelsFromOrigin,
     searchTMDB,
     getTMDB
 }

@@ -10,6 +10,7 @@ const TaskControlSchema = new mongoose.Schema({
     found_db: {type: Number},
     found_tmdb: {type: Number},
     log_data: {type:String},
+    last_to_event_fetch: {type: Date},
     created_at: {type: Date, default: new Date()},
     succes: {type: Boolean}
 })

@@ -74,16 +74,16 @@ async function getMedia(event) {
 }
 
 
-async function saveEvents(days){
+async function saveEvents(days, last_to_event_fetch){
     const hour = 24
     tmdb_fetchs = 0, found_db = 0, found_tmdb = 0
 
     console.log('+++ Fetch Events from origin...')
 
-    const dateFrom = Date.now()
+    const dateFrom = last_to_event_fetch || Date.now() //Only lasTof is send if days > 0
     const dateTo = new Date(dateFrom+(hour*60)*60*1000)
     
-    const channels = await fetchDataFromOrigin(dateFrom, dateTo, days)
+    const {channels, lastToEventFetch} = await fetchDataFromOrigin(dateFrom, dateTo, days)
     console.log(channels[0].events);
     console.log('+++ Fetched...')
 
@@ -133,7 +133,8 @@ async function saveEvents(days){
             total: savedEvents.length,
             tmdb_fetchs,
             found_db,
-            found_tmdb
+            found_tmdb,
+            lastToEventFetch
         }
     }else {
         return new Error('Error epg no found')

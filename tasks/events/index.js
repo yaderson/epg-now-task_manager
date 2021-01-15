@@ -5,7 +5,7 @@ const { saveEvents } = require("./eventTask")
 
 
 module.exports = async function (data) {
-    const { started_date, days } = data
+    const { started_date, days, last_to_event_fetch } = data
 
     console.log('Handing task events ...')
     await messager(`\u{1F3C1} The task/events was started successful`)
@@ -22,7 +22,7 @@ module.exports = async function (data) {
     }
 
     
-    const final = await saveEvents(days||0)
+    const final = await saveEvents(days||0, last_to_event_fetch)
     const finish_date = new Date()
 
 
@@ -33,7 +33,7 @@ module.exports = async function (data) {
     report.found_tmdb = final.found_tmdb
     report.number_events_with_media = final.found_db+final.found_tmdb
     report.number_tmdb_fetch = final.tmdb_fetchs
-
+    report.last_to_event_fetch = final.lastToEventFetch
     report.succes = true
 
 
