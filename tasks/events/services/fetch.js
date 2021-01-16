@@ -20,7 +20,7 @@ async function getEpg(from, to){
     return res.response.channels
 }
 
-async function fetchchannelsFromOrigin(from, to, days) {
+async function fetchDataFromOrigin(from, to, days) {
 
     let lastToEventFetch = to
     
@@ -72,7 +72,7 @@ async function getTMDB(id, mediaType){
 }
 
 module.exports = {
-    fetchchannelsFromOrigin,
+    fetchDataFromOrigin,
     searchTMDB,
     getTMDB
 }
