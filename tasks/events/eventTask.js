@@ -80,7 +80,7 @@ async function saveEvents(days, last_to_event_fetch){
 
     console.log('+++ Fetch Events from origin...')
 
-    const dateFrom = last_to_event_fetch || Date.now() //Only lasTof is send if days > 0
+    const dateFrom = new Date(last_to_event_fetch) || Date.now() //Only lasTof is send if days > 0
     const dateTo = new Date(dateFrom+(hour*60)*60*1000)
     
     const {channels, lastToEventFetch} = await fetchDataFromOrigin(dateFrom, dateTo, days)
