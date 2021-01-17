@@ -84,7 +84,6 @@ async function saveEvents(days, last_to_event_fetch){
     const dateTo = new Date(dateFrom+(hour*60)*60*1000)
     
     const {channels, lastToEventFetch} = await fetchDataFromOrigin(dateFrom, dateTo, days)
-    return null
     console.log('+++ Fetched...')
 
     let eventsAll = []
