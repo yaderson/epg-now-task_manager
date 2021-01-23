@@ -54,7 +54,7 @@ async function fetchchannelsFromOrigin(from, to, days) {
             lastToEventFetch = moreTo
         }
     }
-
+    if(days === 0) channels.shift()
 	return {
         channels,
         lastToEventFetch
